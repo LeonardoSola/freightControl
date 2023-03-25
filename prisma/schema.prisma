@@ -1,0 +1,169 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  users     User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  username  String   @unique
+  email     String   @unique
+  password  String
+  role      Role     @relation(fields: [roleId], references: [id])
+  roleId    Int
+  cellPhone String
+  cpf       String  @unique
+  cargo_driver Path[] @relation("path_driver")
+  orders    Order[]
+  active    Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
+
+model TruckStatus {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  trucks    Truck[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
+
+model Truck {
+  id        Int      @id @default(autoincrement())
+  model     String 
+  plate     String
+  year      Int
+  max_weight Int
+  status    TruckStatus @relation(fields: [statusId], references: [id])
+  statusId  Int
+  paths     Path[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
+
+model State{
+  id        Int      @id @default(autoincrement())
+  name      String
+  cities    City[]   @relation("CityState")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
+
+model City{
+  id        Int      @id @default(autoincrement())
+  name      String
+  state     State    @relation("CityState", fields: [stateId], references: [id])
+  stateId   Int
+  pathsDestiny Path[] @relation("cargo_destiny_city")
+  pathsOrigin Path[] @relation("cargo_origin_city")
+  ordersDestiny Order[] @relation("order_destiny_city")
+  ordersOrigin Order[] @relation("order_origin_city")
+  stops     Stop[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
+
+model CargoType {
+  id        Int      @id @default(autoincrement())
+  name      String
+  cargos    Cargo[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
+
+model Cargo {
+  id        Int      @id @default(autoincrement())
+  name      String
+  weight    Int
+  size_x    Int
+  size_y    Int
+  size_z    Int
+  orders    Order[] @relation("cargo_client")
+  type      CargoType @relation(fields: [typeId], references: [id])
+  typeId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
+
+model OrderStatus {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  orders    Order[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
+
+model Order {
+  id        Int      @id @default(autoincrement())
+  cargo     Cargo    @relation(fields: [cargoId], references: [id], name: "cargo_client")
+  cargoId   Int
+  client    User     @relation(fields: [clientId], references: [id])
+  clientId  Int
+  status    OrderStatus @relation(fields: [statusId], references: [id])
+  statusId  Int
+  origin    City     @relation("order_origin_city", fields: [originId], references: [id])
+  originId  Int
+  destiny   City?     @relation("order_destiny_city", fields: [destinyId], references: [id])
+  destinyId Int
+  start_time     DateTime
+  forecast_time   DateTime
+  end_time       DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
+
+model Path {
+  id        Int      @id @default(autoincrement())
+  truck     Truck    @relation(fields: [truckId], references: [id])
+  truckId   Int
+  driver   User    @relation(fields: [driverId], references: [id], name: "path_driver")
+  driverId  Int
+  origin    City     @relation("cargo_origin_city", fields: [originId], references: [id])
+  originId  Int
+  destiny   City?     @relation("cargo_destiny_city", fields: [destinyId], references: [id])
+  destinyId Int
+  stops     Stop[]
+  start_time     DateTime
+  end_time       DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
+
+model Stop {
+  id        Int      @id @default(autoincrement())
+  path      Path     @relation(fields: [pathId], references: [id])
+  pathId    Int
+  order     Int
+  city      City     @relation(fields: [cityId], references: [id])
+  cityId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
+
