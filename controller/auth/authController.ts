@@ -1,13 +1,30 @@
-import { User } from "@prisma/client";
 import { Request, Response } from "express";
 import UserModel from "../../models/user";
 import { SendRes } from "../../response/response";
-import { ValidCPF } from "../../utils/tools";
+import AuthService from "../../auth/auth";
 
-export function Login(req: Request, res: Response) {
-    console.log(req.body);
-    
-    res.send("Login");
+export async function Login(req: Request, res: Response) {
+    var user = new UserModel();
+
+    if(String(req.body.username).includes("@"))
+    await user.SearchByEmail(req.body.username);
+    else await user.SearchByUsername(req.body.username);
+
+    if(user.user.id == 0) {
+        return SendRes(res, 400, "Usuário não encontrado");
+    }
+
+    if(!user.ComparePassword(req.body.password)) {
+        return SendRes(res, 400, "Senha incorreta");
+    }
+
+    if(!user.user.active) {
+        return SendRes(res, 400, "Usuário inativo");
+    }
+
+    var token = AuthService.GenerateToken(user.user.id)
+
+    SendRes(res, 200, "Login efetuado com sucesso", { token });
 }
 
 export async function Register(req: Request, res: Response) {

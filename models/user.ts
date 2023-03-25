@@ -110,8 +110,8 @@ class UserModel {
     }
 
     // Compare user password
-    public comparePassword(user: User, password: string) {
-        return security.PassCompare(password, user.password);
+    public ComparePassword(password: string) {
+        return security.PassCompare(password, this.user.password);
     }
 
     // Search user by CPF
