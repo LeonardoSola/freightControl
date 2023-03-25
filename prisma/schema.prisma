@@ -27,11 +27,11 @@ model User {
   password  String
   role      Role     @relation(fields: [roleId], references: [id])
   roleId    Int
-  cellPhone String
+  cellphone String
   cpf       String  @unique
   cargo_driver Path[] @relation("path_driver")
   orders    Order[]
-  active    Boolean
+  active    Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?

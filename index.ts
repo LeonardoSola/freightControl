@@ -11,7 +11,7 @@ app.use(router);
 // Database
 require("./database/database").Test();
 // Migrations
-require("./migrations/migrations").Migrate();
+require("./migration/migration").Migrate();
 
 app.listen(port,
     () => console.log("Server: ✅ | Port: "+ port)
