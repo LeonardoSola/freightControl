@@ -4,7 +4,6 @@ const router = express.Router();
 import { GetRoutes } from "./routes/routes";
 import { Authentication } from "./middlewares/authencation";
 import { Request, Response } from "express";
-import db from "../database/database";
 
 
 for(let r of GetRoutes()) {

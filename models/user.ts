@@ -1,7 +1,16 @@
-import { User } from "@prisma/client";
+import { Role, User } from "@prisma/client";
 import db from "../database/database";
 import security from "../security/security";
 import { ValidCPF } from "../utils/tools";
+
+declare global {
+    namespace Express {
+        interface Request {
+        user: UserModel;
+        }
+    }
+}
+
 
 class UserModel {
     public user: User = {
@@ -14,6 +23,13 @@ class UserModel {
         cellphone: "",
         roleId: 0,
         active: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null
+    }
+    public role: Role = {
+        id: 0,
+        name: "",
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null
@@ -114,36 +130,41 @@ class UserModel {
         return security.PassCompare(password, this.user.password);
     }
 
-    // Search user by CPF
-    public async SearchByCPF(cpf: string): Promise<boolean> {
+    private async find(where: any): Promise<boolean> {
         let found = await db.user.findFirst({
-            where: {
-                cpf: cpf
-            }
-        });
+            where
+        })
 
         if(found != null) {
             this.user = found;
+            this.getRole();
             return true;
         }
 
         return false;
     }
 
+    private async getRole(): Promise<void> {
+        let found = await db.role.findFirst({
+            where: {
+                id: this.user.roleId
+            }
+        })
+    }
+
+    // Search user by CPF
+    public async SearchByCPF(cpf: string): Promise<boolean> {
+        return await this.find({ cpf: cpf });
+    }
+
+    // Search user by id
+    public async SearchById(id: number): Promise<boolean> {
+        return await this.find({ id: id });
+    }
+
     // Search user by email
     public async SearchByEmail(email: string): Promise<boolean> {
-        let found = await db.user.findFirst({
-            where: {
-                email: email
-            }
-        });
-
-        if(found != null) {
-            this.user = found;
-            return true;
-        }
-
-        return false;
+        return await this.find({ email: email });
     }
 
     // Search user by username
@@ -193,4 +214,5 @@ class UserModel {
         }
     }
 }
+
 export default UserModel;
