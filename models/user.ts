@@ -2,6 +2,7 @@ import { Role, User } from "@prisma/client";
 import db from "../database/database";
 import security from "../security/security";
 import { ValidCPF } from "../utils/tools";
+import { Pagination } from "./models";
 
 declare global {
     namespace Express {
@@ -64,7 +65,7 @@ class UserModel {
     }
 
     // Validate user data
-    public ValidateUser(): string {
+    public ValidateUser(skipPass:boolean=false): string {
         let user = this.user;
         // Name
         if(user.name == null || user.name == "") {
@@ -91,7 +92,8 @@ class UserModel {
             return "Email deve ter no máximo 100 caracteres";
         }
 
-        if(user.password == null || user.password == "") {
+        if(!skipPass) 0
+        else if(user.password == null || user.password == "") {
             return "Senha é obrigatória";
         } else if(user.password.length < 3) {
             return "Senha deve ter pelo menos 3 caracteres";
@@ -130,6 +132,8 @@ class UserModel {
         return security.PassCompare(password, this.user.password);
     }
 
+    //DATABASE METHODS
+
     private async find(where: any): Promise<boolean> {
         let found = await db.user.findFirst({
             where
@@ -137,7 +141,7 @@ class UserModel {
 
         if(found != null) {
             this.user = found;
-            this.getRole();
+            await this.getRole();
             return true;
         }
 
@@ -150,6 +154,12 @@ class UserModel {
                 id: this.user.roleId
             }
         })
+
+        if(found != null) {
+            this.role = found;
+        }
+
+        return;
     }
 
     // Search user by CPF
@@ -159,6 +169,8 @@ class UserModel {
 
     // Search user by id
     public async SearchById(id: number): Promise<boolean> {
+        if(isNaN(id)) 
+            return false;
         return await this.find({ id: id });
     }
 
@@ -199,19 +211,139 @@ class UserModel {
         return false;
     }
 
-    // Create user
-    public async Create(): Promise<boolean> {
+    // Set role by id
+    public async SetRoleById(roleId: number = 3): Promise<boolean> {
+        let found = await db.role.findFirst({
+            where: {
+                id: roleId
+            }
+        });
+
+        if(found != null) {
+            this.user.roleId = found.id;
+            return true;
+        }
+
+        return false;
+    }
+
+    // Get all users
+    public async GetAll(pagination: Pagination, search: string = ""): Promise<[User[], number]> {
+        let where = {
+            deletedAt: null,
+            AND: {
+                OR: [
+                    {
+                        name: {
+                            contains: search
+                        }
+                    },
+                    {
+                        username: {
+                            contains: search
+                        }
+                    },
+                    {
+                        email: {
+                            contains: search
+                        }
+                    },
+                    {
+                        cpf: {
+                            contains: search
+                        }
+                    }
+                ]
+            }
+        }
+
+        let users = await db.user.findMany({
+            where,
+            skip: pagination.offset,
+            take: pagination.limit,
+            orderBy: {
+                name: "asc"
+            },
+            select: {
+                id: true,
+                name: true,
+                username: true,
+                email: true,
+                cpf: true,
+                cellphone: true,
+                createdAt: true,
+                updatedAt: true,
+                deletedAt: true,
+                roleId: true
+            }
+        }) as User[];
+
+        let count = await db.user.count({
+            where
+        });
+
+        return [users, count];
+    }
+
+    private async create(): Promise<boolean> {
         try {
             let user = await db.user.create({
+                data: this.user
+            });
+            
+            this.user = user;
+            return true;
+        } catch(e) {
+            return false
+        }
+    }
+
+    // Create user
+    public async Create(): Promise<boolean> {
+        return await this.create();
+    }
+
+    private async update(): Promise<boolean> {
+        try {
+            let user = await db.user.update({
+                where: {
+                    id: this.user.id
+                },
                 data: this.user
             });
 
             this.user = user;
             return true;
         } catch(e) {
-            console.log(e);
             return false
         }
+    }
+
+    // Update user
+    public async Update(): Promise<boolean> {
+        return await this.update();
+    }
+
+    private async delete(): Promise<boolean> {
+        try {
+            let user = await db.user.delete({
+                where: {
+                    id: this.user.id
+                }
+            });
+
+            this.user = user;
+            return true;
+        } catch(e) {
+            return false
+        }
+    }
+
+    // Delete user
+    public async Delete(): Promise<boolean> {
+        this.user.deletedAt = new Date();
+        this.user.active = false;
+        return await this.update();
     }
 }
 

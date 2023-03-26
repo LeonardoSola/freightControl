@@ -1,4 +1,6 @@
-// Description: Funções de validação de CPF
+import { Pagination } from "../models/models";
+
+// Funções de validação de CPF
 export const ValidCPF = (strCPF: string) => {
     strCPF = String(strCPF).replace(/\D/g,'');
     var Soma;
@@ -20,4 +22,23 @@ export const ValidCPF = (strCPF: string) => {
     if ((Resto == 10) || (Resto == 11))  Resto = 0;
     if (Resto != parseInt(strCPF.substring(10, 11) ) ) return false;
     return true;
+}
+
+// Extrai limit e offset da requisicao
+export const GetPagination = (query: any):Pagination => {
+    var pag:Pagination = {
+        limit: 10,
+        offset: 0,
+        count: 0
+    }
+
+    if(query.limit != null && query.limit != "") {
+        pag.limit = parseInt(query.limit);
+    }
+
+    if(query.offset != null && query.offset != "") {
+        pag.offset = parseInt(query.offset);
+    }
+
+    return pag;
 }
