@@ -62,10 +62,11 @@ model Truck {
 
 model State{
   id        Int      @id @default(autoincrement())
-  name      String
+  name      String  @unique
+  uf        String   @unique
   cities    City[]   @relation("CityState")
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
   deletedAt DateTime?
 }
 
@@ -80,7 +81,7 @@ model City{
   ordersOrigin Order[] @relation("order_origin_city")
   stops     Stop[]
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
   deletedAt DateTime?
 }
 
