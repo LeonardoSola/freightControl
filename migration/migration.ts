@@ -15,7 +15,7 @@ async function CreateRoles() {
     try{
         await db.role.createMany({
             data: [
-                {name: "adminatrator"},
+                {name: "admin"},
                 {name: "driver"},
                 {name: "client"}
             ]
@@ -46,6 +46,7 @@ async function CreateStates() {
             await db.state.create({
                 data: {
                     name: estado.nome,
+                    // @ts-ignore
                     uf: estado.sigla,
                     cities: {
                         create: estado.cidades.map((city) => {

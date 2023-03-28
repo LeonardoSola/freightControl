@@ -7,14 +7,14 @@ import { Pagination } from "./models";
 declare global {
     namespace Express {
         interface Request {
-        user: UserModel;
+            user: UserModel;
         }
     }
 }
 
 
 class UserModel {
-    public user: User = {
+    public info: User = {
         id: 0,
         name: "",
         username: "",
@@ -41,7 +41,7 @@ class UserModel {
 
     // Set user data
     public setUser(user: User) {
-        this.user = user;
+        this.info = user;
     }
 
     // Set user body
@@ -61,12 +61,12 @@ class UserModel {
             deletedAt: null
         }
     
-        this.user = user;
+        this.info = user;
     }
 
     // Validate user data
     public ValidateUser(skipPass:boolean=false): string {
-        let user = this.user;
+        let user = this.info;
         // Name
         if(user.name == null || user.name == "") {
             return "Nome é obrigatório";
@@ -124,12 +124,12 @@ class UserModel {
 
     // Set user password
     public SetPassword(password: string) {
-        this.user.password = security.PassHash(password);
+        this.info.password = security.PassHash(password);
     }
 
     // Compare user password
     public ComparePassword(password: string) {
-        return security.PassCompare(password, this.user.password);
+        return security.PassCompare(password, this.info.password);
     }
 
     //DATABASE METHODS
@@ -140,7 +140,7 @@ class UserModel {
         })
 
         if(found != null) {
-            this.user = found;
+            this.info = found;
             await this.getRole();
             return true;
         }
@@ -151,7 +151,7 @@ class UserModel {
     private async getRole(): Promise<void> {
         let found = await db.role.findFirst({
             where: {
-                id: this.user.roleId
+                id: this.info.roleId
             }
         })
 
@@ -188,7 +188,7 @@ class UserModel {
         });
 
         if(found != null) {
-            this.user = found;
+            this.info = found;
             return true;
         }
 
@@ -204,7 +204,7 @@ class UserModel {
         });
 
         if(found != null) {
-            this.user.roleId = found.id;
+            this.info.roleId = found.id;
             return true;
         }
 
@@ -220,7 +220,7 @@ class UserModel {
         });
 
         if(found != null) {
-            this.user.roleId = found.id;
+            this.info.roleId = found.id;
             return true;
         }
 
@@ -288,10 +288,10 @@ class UserModel {
     private async create(): Promise<boolean> {
         try {
             let user = await db.user.create({
-                data: this.user
+                data: this.info
             });
             
-            this.user = user;
+            this.info = user;
             return true;
         } catch(e) {
             return false
@@ -307,12 +307,12 @@ class UserModel {
         try {
             let user = await db.user.update({
                 where: {
-                    id: this.user.id
+                    id: this.info.id
                 },
-                data: this.user
+                data: this.info
             });
 
-            this.user = user;
+            this.info = user;
             return true;
         } catch(e) {
             return false
@@ -328,11 +328,11 @@ class UserModel {
         try {
             let user = await db.user.delete({
                 where: {
-                    id: this.user.id
+                    id: this.info.id
                 }
             });
 
-            this.user = user;
+            this.info = user;
             return true;
         } catch(e) {
             return false
@@ -341,8 +341,8 @@ class UserModel {
 
     // Delete user
     public async Delete(): Promise<boolean> {
-        this.user.deletedAt = new Date();
-        this.user.active = false;
+        this.info.deletedAt = new Date();
+        this.info.active = false;
         return await this.update();
     }
 }

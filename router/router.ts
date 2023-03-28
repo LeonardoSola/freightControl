@@ -7,8 +7,8 @@ import { Request, Response } from "express";
 
 
 for(let r of GetRoutes()) {
-    if(r.Auth) {
-        router[r.method](r.URI, Authentication, r.handler);
+    if(r.Auth && r.Role) {
+        router[r.method](r.URI, Authentication(r.Role), r.handler);
     } else {
         router[r.method](r.URI, r.handler);
     }

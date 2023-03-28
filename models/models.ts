@@ -5,6 +5,7 @@ export type Route = {
     method: string;
     handler: (req: Request, res: Response, next: NextFunction) => void;
     Auth: boolean;
+    Role?: string[];
 }
 
 export type Pagination = {

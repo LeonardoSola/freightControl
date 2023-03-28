@@ -37,16 +37,16 @@ export async function Create(req: Request, res: Response) {
     if(err != "")
         return SendRes(res, 400, err);
 
-    newUser.SetPassword(newUser.user.password);
+    newUser.SetPassword(newUser.info.password);
 
     var foundUser = new UserModel();
-    if(await foundUser.SearchByCPF(newUser.user.cpf)) 
+    if(await foundUser.SearchByCPF(newUser.info.cpf)) 
         return SendRes(res, 400, "CPF já cadastrado");
 
-    if(await foundUser.SearchByEmail(newUser.user.email))
+    if(await foundUser.SearchByEmail(newUser.info.email))
         return SendRes(res, 400, "Email já cadastrado");
 
-    if(await foundUser.SearchByUsername(newUser.user.username))
+    if(await foundUser.SearchByUsername(newUser.info.username))
         return SendRes(res, 400, "Username já cadastrado");
 
     console.log("Aqui 1");
@@ -75,7 +75,7 @@ export async function Update(req: Request, res: Response) {
 
     if(req.body.password)
         user.SetPassword(req.body.password)
-    else user.user.password = oldUser.user.password;
+    else user.info.password = oldUser.info.password;
 
     if(!await user.Update())
         return SendRes(res, 500, "Erro ao atualizar usuário");

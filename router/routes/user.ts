@@ -7,33 +7,38 @@ export const UserRoutes: Array<Route> = [
         URI: "/user",
         method: "get",
         handler: controller.GetAll,
-        Auth: true
+        Auth: true,
+        Role: ["admin"]
     },
     {
         URI: "/user/:id",
         method: "get",
         handler: controller.Get,
-        Auth: true
+        Auth: true,
+        Role: ["admin"]
     },
     // Post
     {
         URI: "/user",
         method: "post",
         handler: controller.Create,
-        Auth: true
+        Auth: true,
+        Role: ["admin"]
     },
     // Put
     {
         URI: "/user/:id",
         method: "put",
         handler: controller.Update,
-        Auth: true
+        Auth: true,
+        Role: ["admin"]
     },
     // Delete
     {
         URI: "/user/:id",
         method: "delete",
         handler: controller.Delete,
-        Auth: true
+        Auth: true,
+        Role: ["admin"]
     }
 ]
