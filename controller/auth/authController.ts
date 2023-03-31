@@ -24,7 +24,7 @@ export async function Login(req: Request, res: Response) {
 
     var token = AuthService.GenerateToken(user.info.id)
 
-    SendRes(res, 200, "Login efetuado com sucesso", { token });
+    SendRes(res, 200, "Login efetuado com sucesso", { token, role:user.role.name });
 }
 
 export async function Register(req: Request, res: Response) {

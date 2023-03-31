@@ -162,6 +162,12 @@ class UserModel {
         return;
     }
 
+    public async GetAllRoles(): Promise<Role[]> {
+        let found = await db.role.findMany();
+
+        return found;
+    }
+
     // Search user by CPF
     public async SearchByCPF(cpf: string): Promise<boolean> {
         return await this.find({ cpf: cpf });

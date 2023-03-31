@@ -1,4 +1,5 @@
 import { Route } from "../../models/models";
+import { CitieStateRoutes } from "./city-state";
 import { LoginRoutes } from "./login";
 import { UserRoutes } from "./user";
 
@@ -7,7 +8,8 @@ export function GetRoutes(): Array<Route> {
 
     allRoutes = allRoutes.concat(
         LoginRoutes,
-        UserRoutes
+        UserRoutes,
+        CitieStateRoutes
     );
     
     return allRoutes;

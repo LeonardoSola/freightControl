@@ -1,7 +1,7 @@
 import * as controller from "../../controller/auth/authController";
 import { Route } from "../../models/models";
 
-export const LoginRoutes: Array<Route> = [
+export const LoginRoutes: Route[] = [
     // Post
     {
         URI: "/login",

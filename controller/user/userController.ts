@@ -94,3 +94,12 @@ export async function Delete(req: Request, res: Response) {
 
     SendRes(res, 200, "Usuário deletado com sucesso");
 }
+
+// Roles
+export async function GetAllRoles(req: Request, res: Response) {
+    var user = new UserModel();
+
+    var roles = await user.GetAllRoles();
+
+    SendRes(res, 200, "Roles encontradas", roles);
+}

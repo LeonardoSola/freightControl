@@ -1,51 +1,45 @@
-import * as controller from "../../controller/user/userController";
 import { Route } from "../../models/models";
+import * as controller from "../../controller/truck/truckController";
 
-export const UserRoutes: Route[] = [
-    // Get
+
+export const TruckRoutes: Route[] = [
+    // GET
     {
-        URI: "/user",
+        URI: "/truck",
         method: "get",
         handler: controller.GetAll,
         Auth: true,
         Role: ["admin"]
     },
     {
-        URI: "/user/:id",
+        URI: "/truck",
         method: "get",
         handler: controller.Get,
         Auth: true,
         Role: ["admin"]
     },
+    // POST
     {
-        URI: "/role",
+        URI: "/truck",
         method: "get",
-        handler: controller.GetAllRoles,
-        Auth: true,
-        Role: ["admin"]
-    },
-    // Post
-    {
-        URI: "/user",
-        method: "post",
         handler: controller.Create,
         Auth: true,
         Role: ["admin"]
     },
-    // Put
+    // PUT
     {
-        URI: "/user/:id",
-        method: "put",
+        URI: "/truck",
+        method: "get",
         handler: controller.Update,
         Auth: true,
         Role: ["admin"]
     },
-    // Delete
+    // DELETE
     {
-        URI: "/user/:id",
-        method: "delete",
+        URI: "/truck",
+        method: "get",
         handler: controller.Delete,
         Auth: true,
         Role: ["admin"]
-    }
+    },
 ]

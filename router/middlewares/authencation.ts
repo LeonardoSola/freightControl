@@ -3,7 +3,7 @@ import auth from "../../auth/auth";
 import UserModel from "../../models/user";
 
 
-export function Authentication(role: string[]): Function {
+export function Authentication(role: string[] = []): Function {
     return async function (req: Request, res: Response, next: NextFunction) {
         var token = req.headers['authorization'];
 
@@ -25,8 +25,10 @@ export function Authentication(role: string[]): Function {
             return res.status(401).json({ message: "Não autorizado" });
 
         // Verificação de cargo
-        if (role.includes(req.user.role.name)) {
-            return res.status(401).json({ message: "Não autorizado" });
+        if(role.length > 0){
+            if (!role.includes(req.user.role.name)) {
+                return res.status(401).json({ message: "Não autorizado" });
+            }
         }
 
         next();
