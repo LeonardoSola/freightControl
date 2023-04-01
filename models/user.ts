@@ -1,7 +1,7 @@
 import { Role, User } from "@prisma/client";
 import db from "../database/database";
 import security from "../security/security";
-import { ValidCPF } from "../utils/tools";
+import { ValidCPFCNPJ } from "../utils/tools";
 import { Pagination } from "./models";
 
 declare global {
