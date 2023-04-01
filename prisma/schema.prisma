@@ -28,8 +28,8 @@ model User {
   role      Role     @relation(fields: [roleId], references: [id])
   roleId    Int
   cellphone String
-  cpf       String  @unique
-  cargo_driver Path[] @relation("path_driver")
+  cpfCnpj       String  @unique
+  cargoDriver Path[] @relation("path_driver")
   orders    Order[]
   active    Boolean @default(true)
   createdAt DateTime @default(now())
@@ -51,7 +51,7 @@ model Truck {
   model     String 
   plate     String
   year      Int
-  max_weight Int
+  maxWeight Int
   status    TruckStatus @relation(fields: [statusId], references: [id])
   statusId  Int
   paths     Path[]
@@ -98,9 +98,9 @@ model Cargo {
   id        Int      @id @default(autoincrement())
   name      String
   weight    Int
-  size_x    Int
-  size_y    Int
-  size_z    Int
+  sizeX    Int
+  sizeY    Int
+  sizeZ    Int
   orders    Order[] @relation("cargo_client")
   type      CargoType @relation(fields: [typeId], references: [id])
   typeId    Int
@@ -130,9 +130,9 @@ model Order {
   originId  Int
   destiny   City?     @relation("order_destiny_city", fields: [destinyId], references: [id])
   destinyId Int
-  start_time     DateTime
-  forecast_time   DateTime
-  end_time       DateTime
+  startTime     DateTime
+  forecastTime   DateTime
+  endTime       DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
@@ -149,8 +149,8 @@ model Path {
   destiny   City?     @relation("cargo_destiny_city", fields: [destinyId], references: [id])
   destinyId Int
   stops     Stop[]
-  start_time     DateTime
-  end_time       DateTime
+  startTime     DateTime
+  endTime       DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?

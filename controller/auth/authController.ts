@@ -38,8 +38,8 @@ export async function Register(req: Request, res: Response) {
     newUser.SetPassword(newUser.info.password);
 
     var foundUser = new UserModel();
-    if(await foundUser.SearchByCPF(newUser.info.cpf)) {
-        return SendRes(res, 400, "CPF já cadastrado");
+    if(await foundUser.SearchByCPFCNPJ(newUser.info.cpfCnpj)) {
+        return SendRes(res, 400, "CPF/CNPJ já cadastrado");
     }
 
     if(await foundUser.SearchByEmail(newUser.info.email)) {

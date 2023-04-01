@@ -20,7 +20,7 @@ class UserModel {
         username: "",
         email: "",
         password: "",
-        cpf: "",
+        cpfCnpj: "",
         cellphone: "",
         roleId: 0,
         active: false,
@@ -51,7 +51,7 @@ class UserModel {
             username: body.username,
             email: body.email,
             password: body.password,
-            cpf: body.cpf,
+            cpfCnpj: body.cpfCnpj,
             roleId: 3,
             cellphone: body.cellphone,
             id: 0,
@@ -101,13 +101,13 @@ class UserModel {
             return "Senha deve ter no máximo 50 caracteres";
         }
 
-        user.cpf = user.cpf.replace(/\D/g, "");
-        if(user.cpf == null || user.cpf == "") {
-            return "CPF é obrigatório";
-        } else if(user.cpf.length != 11) {
-            return "CPF deve ter 11 caracteres";
-        } else if(!ValidCPF(user.cpf)) {
-            return "CPF inválido";
+        user.cpfCnpj = user.cpfCnpj.replace(/\D/g, "");
+        if(user.cpfCnpj == null || user.cpfCnpj == "") {
+            return "CPF/CNPJ é obrigatório";
+        } else if(user.cpfCnpj.length != 11 && user.cpfCnpj.length != 14) {
+            return "CPF/CNPJ deve ter 11 ou 14 caracteres";
+        } else if(!ValidCPFCNPJ(user.cpfCnpj)) {
+            return "CPF/CNPJ inválido";
         }
 
         user.cellphone = String(user.cellphone).replace(/\D/g, "");
@@ -168,9 +168,9 @@ class UserModel {
         return found;
     }
 
-    // Search user by CPF
-    public async SearchByCPF(cpf: string): Promise<boolean> {
-        return await this.find({ cpf: cpf });
+    // Search user by CPF/CNPJ
+    public async SearchByCPFCNPJ(cpfCnpj: string): Promise<boolean> {
+        return await this.find({ cpfCnpj });
     }
 
     // Search user by id
@@ -255,7 +255,7 @@ class UserModel {
                         }
                     },
                     {
-                        cpf: {
+                        cpfCnpj: {
                             contains: search
                         }
                     }
@@ -275,7 +275,7 @@ class UserModel {
                 name: true,
                 username: true,
                 email: true,
-                cpf: true,
+                cpfCnpj: true,
                 cellphone: true,
                 createdAt: true,
                 updatedAt: true,
