@@ -101,6 +101,7 @@ class UserModel {
             return "Senha deve ter no máximo 50 caracteres";
         }
 
+        user.cpfCnpj = String(user.cpfCnpj);
         user.cpfCnpj = user.cpfCnpj.replace(/\D/g, "");
         if(user.cpfCnpj == null || user.cpfCnpj == "") {
             return "CPF/CNPJ é obrigatório";
