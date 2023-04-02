@@ -89,6 +89,7 @@ model CargoType {
   id        Int      @id @default(autoincrement())
   name      String
   cargos    Cargo[]
+  price    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
@@ -98,9 +99,9 @@ model Cargo {
   id        Int      @id @default(autoincrement())
   name      String
   weight    Int
-  sizeX    Int
-  sizeY    Int
-  sizeZ    Int
+  sizeX    Float
+  sizeY    Float
+  sizeZ    Float
   orders    Order[] @relation("cargo_client")
   type      CargoType @relation(fields: [typeId], references: [id])
   typeId    Int
@@ -130,6 +131,7 @@ model Order {
   originId  Int
   destiny   City?     @relation("order_destiny_city", fields: [destinyId], references: [id])
   destinyId Int
+  value     Int
   startTime     DateTime
   forecastTime   DateTime
   endTime       DateTime
