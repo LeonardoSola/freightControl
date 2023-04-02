@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { GetPagination } from "../../utils/tools";
 import { TruckModel } from "../../models/truck";
-import { SendList } from "../../response/response";
+import { SendList, SendRes } from "../../response/response";
 
 export async function GetAll(req: Request, res: Response) {
     var pagination = GetPagination(req.query);
@@ -27,18 +27,44 @@ export async function GetAll(req: Request, res: Response) {
     SendList(res, 200, "Resultados da pesquisa", trucks, pagination)
 }
 
-export function Get(req: Request, res: Response) {
-    
+export async function Get(req: Request, res: Response) {
+    var truckModels = new TruckModel();
+
+    if(!await truckModels.SearchById(parseInt(req.params.id)))
+        return SendRes(res, 400, "Caminhão não encontrado");
+
+    SendRes(res, 200, "Caminhão encontrado", truckModels);
 }
 
-export function Create(req: Request, res: Response) {
-    
+export async function Create(req: Request, res: Response) {
+    var truckModels = new TruckModel();
+    truckModels.SetTruckBody(req.body);
+
+    if(!await truckModels.Create())
+        return SendRes(res, 500, "Erro ao criar caminhão");
+
+    else SendRes(res, 200, "Caminhão criado com sucesso");
 }
 
-export function Update(req: Request, res: Response) {
-    
+export async function Update(req: Request, res: Response) {
+    var truckModels = new TruckModel();
+
+    if(!await truckModels.SearchById(parseInt(req.params.id)))
+        return SendRes(res, 400, "Caminhão não encontrado");
+
+    truckModels.UpdateTruckBody(req.body);
+
+    SendRes(res, 200, "Caminhão atualizado com sucesso", truckModels);
 }
 
-export function Delete(req: Request, res: Response) {
-    
+export async function Delete(req: Request, res: Response) {
+    var truckModels = new TruckModel();
+
+    if(!await truckModels.SearchById(parseInt(req.params.id)))
+        return SendRes(res, 400, "Caminhão não encontrado");
+
+    if(!await truckModels.Delete())
+        return SendRes(res, 500, "Erro ao deletar caminhão");
+
+    else SendRes(res, 200, "Caminhão deletado com sucesso");
 }

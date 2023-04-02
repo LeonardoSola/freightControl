@@ -12,7 +12,7 @@ export const TruckRoutes: Route[] = [
         Role: ["admin"]
     },
     {
-        URI: "/truck",
+        URI: "/truck/:id",
         method: "get",
         handler: controller.Get,
         Auth: true,
@@ -21,23 +21,23 @@ export const TruckRoutes: Route[] = [
     // POST
     {
         URI: "/truck",
-        method: "get",
+        method: "post",
         handler: controller.Create,
         Auth: true,
         Role: ["admin"]
     },
     // PUT
     {
-        URI: "/truck",
-        method: "get",
+        URI: "/truck/:id",
+        method: "put",
         handler: controller.Update,
         Auth: true,
         Role: ["admin"]
     },
     // DELETE
     {
-        URI: "/truck",
-        method: "get",
+        URI: "/truck/:id",
+        method: "delete",
         handler: controller.Delete,
         Auth: true,
         Role: ["admin"]

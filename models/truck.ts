@@ -88,15 +88,17 @@ export class TruckModel {
     }
 
     private async remove(): Promise<boolean>{
-        var delet = await db.truck.delete({
+        var del = await db.truck.delete({
             where: {
                 id: this.info.id
             }
-        }).then().catch(a=>{
+        }).then(a=>{
+            return true
+        }).catch(a=>{
             return false
         })
 
-        return false
+        return del
     }
 
     // Public Methods
@@ -106,5 +108,60 @@ export class TruckModel {
         if(search != "") where = {name: {contains: search}}
 
         return await this.findAll(where);
+    }
+
+    public async SearchById(id: number): Promise<boolean>{
+        return await this.find({id})
+    }
+
+    public async SetTruck(truck: Truck): Promise<void>{
+        this.info = truck
+    }   
+
+    public async SetTruckBody(body: any): Promise<void>{
+        this.info = {
+            id: body.id,
+            model: body.model,
+            plate: body.plate,
+            year: body.year,
+            maxWeight: body.maxWeight,
+            statusId: body.statusId,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            deletedAt: null
+        }
+    }
+
+    public async Create(): Promise<boolean>{
+        if(!await this.validate()) return false
+        return await this.create()
+    }
+
+    public async UpdateTruckBody(body: any): Promise<boolean>{
+        if(body.model) this.info.model = body.model
+        if(body.plate) this.info.plate = body.plate
+        if(body.year) this.info.year = body.year
+        if(body.maxWeight) this.info.maxWeight = body.maxWeight
+        if(body.statusId) this.info.statusId = body.statusId
+
+        return await this.save()
+    }
+
+    public async Delete(): Promise<boolean>{
+        return await this.remove()
+    }
+   // Private Methods
+
+    // Return true if the truck is valid
+    private async validate(): Promise<boolean>{
+        this.info.model = String(this.info.model).trim()
+        if(this.info.model == "") return false
+        this.info.plate = String(this.info.plate).trim()
+        if(this.info.plate == "") return false
+        if(this.info.year == 0) return false
+        if(this.info.maxWeight == 0) return false
+        if(this.info.statusId == 0) return false
+
+        return true
     }
 }
