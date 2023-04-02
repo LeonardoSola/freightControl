@@ -40,8 +40,12 @@ export class TruckModel {
         return false;
     }
 
-    private async findAll(where:any = {}): Promise<[Truck[], number]>{
-        let info = await db.truck.findMany({where})
+    private async findAll(pag: Pagination, where:any = {}): Promise<[Truck[], number]>{
+        let info = await db.truck.findMany({
+            where,
+            skip: pag.offset,
+            take: pag.limit,
+        })
 
         var count = await db.truck.count({where})
 
@@ -107,7 +111,7 @@ export class TruckModel {
         if(statusId > 0) where = {statusId}
         if(search != "") where = {name: {contains: search}}
 
-        return await this.findAll(where);
+        return await this.findAll(pag, where);
     }
 
     public async SearchById(id: number): Promise<boolean>{
