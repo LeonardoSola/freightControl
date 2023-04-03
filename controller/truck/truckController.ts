@@ -38,6 +38,8 @@ export async function Get(req: Request, res: Response) {
 
 export async function Create(req: Request, res: Response) {
     var truckModels = new TruckModel();
+    
+    delete req.body.id;
     truckModels.SetTruckBody(req.body);
 
     if(!await truckModels.Create())

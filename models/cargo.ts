@@ -1,4 +1,4 @@
-import { Cargo, CargoType } from "@prisma/client";
+import { Cargo, CargoType } from "@prisma/client";;
 import { Pagination } from "./models";
 import db from "../database/database";
 
@@ -121,8 +121,8 @@ export class CargoModel {
     }
 
     // Public Methods
-    public async GetAll(pag:Pagination, search:string = ""): Promise<[Cargo[], number]>{
-        let where = {
+    public async GetAll(typeId: number, search:string = "", pag:Pagination): Promise<[Cargo[], number]>{
+        let where: any = {
             deletedAt: null,
             AND: {
                 OR: [
@@ -130,26 +130,48 @@ export class CargoModel {
                         name: {
                             contains: search
                         }
-                    }
-                ]
+                    },
+                ],
             }
+        }
+
+        if(typeId > 0) {
+            where.AND["typeId"] = 0
+            where.AND.typeId = typeId
         }
 
         return await this.findAll(pag, where)
     }
 
-    public async Get(id:number): Promise<boolean>{
+    public async SearchById(id:number): Promise<boolean>{
         return await this.find({
             id,
             deletedAt: null
         })
     }
 
-    public async GetByType(typeId:number): Promise<boolean>{
-        return await this.find({
-            typeId,
+    public SetCargoBody(body:any): void{
+        this.info = {
+            id: body.id,
+            name: body.name,
+            weight: body.weight,
+            sizeX: body.sizeX,
+            sizeY: body.sizeY,
+            sizeZ: body.sizeZ,
+            typeId: body.typeId,
+            createdAt: new Date(),
+            updatedAt: new Date(),
             deletedAt: null
-        })
+        }
+    }
+
+    public UpdateCargoBody(body:any): void{
+        if(body.name) this.info.name = body.name
+        if(body.weight) this.info.weight = body.weight
+        if(body.sizeX) this.info.sizeX = body.sizeX
+        if(body.sizeY) this.info.sizeY = body.sizeY
+        if(body.sizeZ) this.info.sizeZ = body.sizeZ
+        if(body.typeId) this.info.typeId = body.typeId
     }
 
     public async Create(): Promise<boolean>{

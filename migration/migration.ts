@@ -9,6 +9,8 @@ export function Migrate() {
         if(states == 0) await CreateStates();
         var truckStatus = await db.truckStatus.count();
         if(truckStatus == 0) await CreateTruckStatus();
+        var cargoTypes = await db.cargoType.count();
+        if(cargoTypes == 0) await CreateCargoTypes();
         console.log("Migrations: ✅");
     });
 }
@@ -69,6 +71,47 @@ async function CreateTruckStatus() {
                 {name: "Indisponível"},
                 {name: "Em manutenção"},
                 {name: "Em viagem"}
+            ]
+        });
+    } catch(e) {
+        // Do nothing
+    } finally {
+        db.$disconnect();
+    }
+}
+
+async function CreateCargoTypes() {
+    try{
+        await db.cargoType.createMany({
+            data: [
+                {
+                    name: "Carga Seca",
+                    price: 50
+                },
+                {
+                    name: "Carga Frágil",
+                    price: 100
+                },
+                {
+                    name: "Carga Perigosa",
+                    price: 150
+                },
+                {
+                    name: "Carga Refrigerada",
+                    price: 200
+                },
+                {
+                    name: "Carga Viva",
+                    price: 250
+                },
+                {
+                    name: "Carga Pesada",
+                    price: 100
+                },
+                {
+                    name: "Carga Muito Pesada",
+                    price: 150
+                }
             ]
         });
     } catch(e) {
