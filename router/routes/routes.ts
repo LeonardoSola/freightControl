@@ -5,6 +5,7 @@ import { TruckRoutes } from "./truck";
 import { UserRoutes } from "./user";
 import { CargoRoutes } from "./cargo";
 import { CargoTypeRoutes } from "./cargotypes";
+import { PathRoutes } from "./path";
 
 export function GetRoutes(): Array<Route> {
     var allRoutes: Array<Route> = [];
@@ -16,6 +17,7 @@ export function GetRoutes(): Array<Route> {
         TruckRoutes,
         CargoRoutes,
         CargoTypeRoutes,
+        PathRoutes,
     );
     
     return allRoutes;

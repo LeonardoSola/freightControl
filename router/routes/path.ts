@@ -1,18 +1,17 @@
+import * as controller from "../../controller/path/pathController";
 import { Route } from "../../models/models";
-import * as controller from "../../controller/truck/truckController";
 
-
-export const TruckRoutes: Route[] = [
-    // GET
-    {
-        URI: "/truck",
+export const PathRoutes: Route[] = [
+     // GET
+     {
+        URI: "/path",
         method: "get",
         handler: controller.GetAll,
         Auth: true,
-        Role: ["admin", "driver"]
+        Role: ["admin"]
     },
     {
-        URI: "/truck/:id",
+        URI: "/path/:id",
         method: "get",
         handler: controller.Get,
         Auth: true,
@@ -20,7 +19,7 @@ export const TruckRoutes: Route[] = [
     },
     // POST
     {
-        URI: "/truck",
+        URI: "/path",
         method: "post",
         handler: controller.Create,
         Auth: true,
@@ -28,7 +27,7 @@ export const TruckRoutes: Route[] = [
     },
     // PUT
     {
-        URI: "/truck/:id",
+        URI: "/path/:id",
         method: "put",
         handler: controller.Update,
         Auth: true,
@@ -36,7 +35,7 @@ export const TruckRoutes: Route[] = [
     },
     // DELETE
     {
-        URI: "/truck/:id",
+        URI: "/path/:id",
         method: "delete",
         handler: controller.Delete,
         Auth: true,
