@@ -13,6 +13,8 @@ export function Migrate() {
         if(cargoTypes == 0) await CreateCargoTypes();
         var orderStatus = await db.orderStatus.count();
         if(orderStatus == 0) await CreateOrderStatus();
+        var users = await db.user.count();
+        if(users == 0) await CreateUserAdmin();
         console.log("Migrations: ✅");
     });
 }
@@ -133,6 +135,29 @@ async function CreateOrderStatus() {
                 {name: "Cancelado"}
             ]
         });
+    } catch(e) {
+        // Do nothing
+    } finally {
+        db.$disconnect();
+    }
+}
+
+async function CreateUserAdmin() {
+    try{
+        await db.user.create({
+            data: {
+                name: "Admin User",
+                username: "admin",
+                email: "admin@email.com",
+                password: "$2a$10$V9nwcNiFmIIA/Tshs2m7tu9hVTGux5il6pMKjUw9Pmq4AeDllyxiu", // 1234
+                roleId: 1,
+                cellphone: "00123456789",
+                cpfCnpj: "12345678909",
+                active: true,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            }
+        })
     } catch(e) {
         // Do nothing
     } finally {
