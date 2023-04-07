@@ -1,4 +1,4 @@
-import * as controller from "../../controller/cargotype/cargoTypeController";
+import * as controller from "../../controller/cargotype/cargotypeController";
 import { Route } from "../../models/models";
 
 export const CargoTypeRoutes: Route[] = [
