@@ -1,0 +1,36 @@
+version: '3.8' # Versão do yml
+
+# Containers
+services:
+  # Container do banco de dados
+  postgres_db:
+    container_name: core_pg_db
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=postgres
+    volumes:
+      - prod_postgres_data:/var/lib/postgresql/data/
+    restart: always
+
+  # Container da API
+  server:
+    container_name: freightControl
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres_db
+    links:
+      - postgres_db:postgres_db
+    environment:
+      - DATABASE_URL=postgres://postgres:pass@postgres_db:5432/postgres?sslmode=disable&schema=public 
+      - PORT=8080
+      - JWT_SECRET=228af4a2a9420b3de5c2772e8d6f0b0a
+
+volumes:
+  prod_postgres_data:
