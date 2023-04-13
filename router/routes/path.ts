@@ -33,6 +33,14 @@ export const PathRoutes: Route[] = [
         Auth: true,
         Role: ["admin"]
     },
+    // PUT  
+    {
+        URI: "/path/:id/stops",
+        method: "put",
+        handler: controller.UpdateStops,
+        Auth: true,
+        Role: ["admin"]
+    },
     // DELETE
     {
         URI: "/path/:id",

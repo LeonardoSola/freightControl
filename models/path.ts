@@ -1,4 +1,4 @@
-import { City, Path, Truck, User } from "@prisma/client";
+import { City, Path, Stop, Truck, User } from "@prisma/client";
 import db from "../database/database";
 import { Pagination } from "./models";
 
@@ -56,6 +56,7 @@ export class PathModel {
         updatedAt: new Date(),
         deletedAt: null
     }
+    stops: Stop[] = []
 
     constructor(){}
 
@@ -67,6 +68,7 @@ export class PathModel {
 
         if(info) {
             this.info = info
+            await this.getStops()
             await this.getTruck()
             await this.getDriver()
             await this.getOrigin()
@@ -75,6 +77,18 @@ export class PathModel {
         }
 
         return false;
+    }
+
+    private async getStops(): Promise<void>{
+        let stops = await db.stop.findMany({
+            where: {
+                pathId: this.info.id
+            }
+        })
+
+        if(stops) {
+            this.stops = stops
+        }
     }
 
     private async getTruck(): Promise<void>{

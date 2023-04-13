@@ -12,7 +12,6 @@ declare global {
     }
 }
 
-
 class UserModel {
     public info: User = {
         id: 0,

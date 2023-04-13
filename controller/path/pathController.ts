@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { PathModel } from "../../models/path";
 import { GetPagination } from "../../utils/tools";
 import { SendList, SendRes } from "../../response/response";
+import { StopModel } from "../../models/stop";
 
 export async function GetAll(req: Request, res: Response) {
     var pagination = GetPagination(req.query);
@@ -67,6 +68,29 @@ export async function Update(req: Request, res: Response) {
         return SendRes(res, 500, "Erro ao atualizar caminho");
 
     SendRes(res, 200, "Caminho atualizado com sucesso", pathModels);
+}
+
+export async function UpdateStops(req: Request, res: Response){
+	var path = new PathModel();
+
+	await path.Get(parseInt(req.params.id))
+
+	if(!path.info.id)
+		return SendRes(res, 400, "Caminho não encontrado");
+
+	var stops = new StopModel();
+
+	stops.pathId = path.info.id;
+
+	if(!stops.pathId)
+		return SendRes(res, 400, "Caminho não encontrado");
+
+	if(!stops.UpdateBody(req.body))
+		return SendRes(res, 400, "Houve um erro ao ler os dados da requisição");
+
+	if(!await stops.UpdateStops())
+		return SendRes(res, 500, "Erro ao atualizar caminho");
+	else SendRes(res, 200, "Caminho atualizado com sucesso");
 }
 
 export async function Delete(req: Request, res: Response) {
