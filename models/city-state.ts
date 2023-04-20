@@ -24,11 +24,6 @@ export class CityModel{
             where.stateId = stateId
         }
 
-        console.log(stateId);
-        console.log(where);
-        
-        
-
         var result = await db.city.findMany({
             where,
             skip: pagination.offset,

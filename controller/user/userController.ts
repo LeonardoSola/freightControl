@@ -49,11 +49,7 @@ export async function Create(req: Request, res: Response) {
     if(await foundUser.SearchByUsername(newUser.info.username))
         return SendRes(res, 400, "Username já cadastrado");
 
-    console.log("Aqui 1");
-    
     if(!await newUser.SetRoleById(req.body.role))
-
-    console.log("Aqui 2");
 
     if(!await newUser.Create())
         return SendRes(res, 500, "Erro ao criar usuário");

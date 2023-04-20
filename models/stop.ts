@@ -52,14 +52,9 @@ export class StopModel{
             }
         })
 
-        console.log("this.pathId", this.pathId)
-        console.log("del", del)
-
         let info = await db.stop.createMany({
             data: this.infoArray
         })
-
-        console.log("info", info)
 
         if(info) {
             return true
