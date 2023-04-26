@@ -1,27 +1,12 @@
 import { Truck, TruckStatus } from "@prisma/client";
 import db from "../database/database";
 import { Pagination } from "./models";
+import { emptyTruck, emptyTruckStatus } from "./emptyModels";
 
 
 export class TruckModel {
-    info: Truck = {
-        id: 0,
-        model: "",
-        plate: "",
-        year: 0,
-        maxWeight: 0,
-        statusId: 0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null
-    }
-    status: TruckStatus = {
-        id: 0,
-        name: "",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null
-    }
+    info: Truck = emptyTruck
+    status: TruckStatus = emptyTruckStatus
 
     constructor(){}
 

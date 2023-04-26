@@ -1,61 +1,14 @@
 import { City, Path, Stop, Truck, User } from "@prisma/client";
 import db from "../database/database";
 import { Pagination } from "./models";
+import { emptyCity, emptyPath, emptyTruck, emptyUser } from "./emptyModels";
 
 export class PathModel {
-    info: Path = {
-        id: 0,
-        truckId: 0,
-        driverId: 0,
-        originId: 0,
-        destinyId: 0,
-        startTime: new Date(),
-        endTime: new Date(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null
-    }
-    truck: Truck = {
-        id: 0,
-        model: "",
-        plate: "",
-        year: 0,
-        maxWeight: 0,
-        statusId: 0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null
-    }
-    driver: User = {
-        id: 0,
-        name: "",
-        username: "",
-        email: "",
-        password: "",
-        roleId: 0,
-        cellphone: "",
-        cpfCnpj: "",
-        active: false,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null
-    }
-    origin: City = {
-        id: 0,
-        name: "",
-        stateId: 0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null
-    }
-    destiny: City = {
-        id: 0,
-        name: "",
-        stateId: 0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null
-    }
+    info: Path = emptyPath
+    truck: Truck = emptyTruck
+    driver: User = emptyUser
+    origin: City = emptyCity
+    destiny: City = emptyCity
     stops: Stop[] = []
 
     constructor(){}

@@ -1,28 +1,11 @@
 import { Cargo, CargoType } from "@prisma/client";;
 import { Pagination } from "./models";
 import db from "../database/database";
+import { emptyCargo, emptyCargoType } from "./emptyModels";
 
 export class CargoModel {
-    info: Cargo = {
-        id: 0,
-        name: "",
-        weight: 0,
-        sizeX: 0,
-        sizeY: 0,
-        sizeZ: 0,
-        typeId: 0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null
-    }
-    type: CargoType = {
-        id: 0,
-        name: "",
-        price: 0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null
-    }
+    info: Cargo = emptyCargo
+    type: CargoType = emptyCargoType
 
     constructor(){}
 

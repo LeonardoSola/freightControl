@@ -3,6 +3,7 @@ import db from "../database/database";
 import security from "../security/security";
 import { ValidCPFCNPJ } from "../utils/tools";
 import { Pagination } from "./models";
+import { emptyRole, emptyUser } from "./emptyModels";
 
 declare global {
     namespace Express {
@@ -13,27 +14,8 @@ declare global {
 }
 
 class UserModel {
-    public info: User = {
-        id: 0,
-        name: "",
-        username: "",
-        email: "",
-        password: "",
-        cpfCnpj: "",
-        cellphone: "",
-        roleId: 0,
-        active: false,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null
-    }
-    public role: Role = {
-        id: 0,
-        name: "",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null
-    }
+    public info: User = emptyUser
+    public role: Role = emptyRole
     
     constructor(){
     }

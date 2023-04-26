@@ -1,17 +1,9 @@
 import { Stop } from "@prisma/client";
 import db from "../database/database";
+import { emptyStop } from "./emptyModels";
 
 export class StopModel{
-    info: Stop = {
-        id: 0,
-        pathId: 0,
-        order: 0,
-        cityId: 0,
-        time: null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null
-    }
+    info: Stop = emptyStop
     infoArray: Stop[] = []
     pathId: number = 0
 

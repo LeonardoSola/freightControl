@@ -136,7 +136,7 @@ model Order {
   path      Path?     @relation(fields: [pathId], references: [id])
   startTime     DateTime
   forecastTime   DateTime
-  endTime       DateTime
+  endTime       DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?

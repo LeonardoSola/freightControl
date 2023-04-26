@@ -1,16 +1,10 @@
 import { City, State } from "@prisma/client";
 import db from "../database/database";
 import { Pagination } from "./models";
+import { emptyCity, emptyState } from "./emptyModels";
 
 export class CityModel{
-    info: City = {
-        id: 0,
-        name: "",
-        stateId: 0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null
-    }
+    info: City = emptyCity
 
     public async GetAll(stateId:number, pagination: Pagination, search: string = ""): Promise<City[]> {
         var result: City[] = [];
@@ -35,14 +29,7 @@ export class CityModel{
 }
 
 export class StateModel{
-    info: State = {
-        id: 0,
-        name: "",
-        uf: "",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null
-    }
+    info: State = emptyState
 
     public async GetAll(pagination: Pagination, search: string = ""): Promise<State[]> {
         var result: State[] = [];
