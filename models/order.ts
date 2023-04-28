@@ -140,4 +140,20 @@ export class OrderModel {
 
         return [orders, count];
     }
+
+    public async SearchById(id: number): Promise<boolean> {
+        return await this.find({ id })
+    }
+
+    public async Create(): Promise<boolean> {
+        return await this.create()
+    }
+
+    public async Update(): Promise<boolean> {
+        return await this.update()
+    }
+
+    public async Delete(): Promise<boolean> {
+        return await this.delete()
+    }
 }
