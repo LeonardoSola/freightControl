@@ -8,6 +8,7 @@ var port: number = Number(process.env.PORT) || 8080;
 
 app.use(Express.json());
 app.use(router);
+app.use(cors());
 
 // Database
 require("./database/database").Test();
