@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "setup": "npm install && prisma generate && prisma migrate dev --name init",
+    "setup": "npm install && prisma generate && prisma migrate deploy",
     "dev": "nodemon --exec ts-node index.ts",
     "start": "docker compose up -d",
     "dockstart": "prisma migrate dev --name init && ts-node index.ts"
@@ -24,6 +24,7 @@
   "dependencies": {
     "@prisma/client": "^4.11.0",
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
