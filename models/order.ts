@@ -9,6 +9,7 @@ export class OrderModel {
     client: User = emptyUser
     status: OrderStatus = emptyOrderStatus
     origin: City = emptyCity
+    destiny: City = emptyCity
 
     constructor() { }
     
@@ -23,6 +24,7 @@ export class OrderModel {
             await this.getClient()
             await this.getStatus()
             await this.getOrigin()
+            await this.getDestiny()
             return true
         }
 
@@ -77,6 +79,18 @@ export class OrderModel {
         }
     }
 
+    private async getDestiny(): Promise<void> {
+        let destiny = await db.city.findFirst({
+            where: {
+                id: this.info.destinyId
+            }
+        })
+
+        if (destiny) {
+            this.destiny = destiny
+        }
+    }
+
     public async create(): Promise<boolean> {
         try {
             let order = await db.order.create({
@@ -121,14 +135,14 @@ export class OrderModel {
         }
     }
 
-    public async GetAll(pagination: Pagination, cargoId: number, clientId: number, statusId: number, originId: number, destinationId: number ): Promise<[Order[], number]> {
+    public async GetAll(pagination: Pagination, cargoId: number, clientId: number, statusId: number, originId: number, destinyId: number ): Promise<[Order[], number]> {
         let where: any = {}
 
         if (cargoId) where.cargoId = cargoId
         if (clientId) where.clientId = clientId
         if (statusId) where.statusId = statusId
         if (originId) where.originId = originId
-        if (destinationId) where.destinationId = destinationId
+        if (destinyId) where.destinyId = destinyId
 
         let orders = await db.order.findMany({
             where,
